@@ -1,0 +1,128 @@
+  <!DOCTYPE html>
+  <html>
+    <head>
+      <!--Import Google Icon Font-->
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <!--Import materialize.css-->
+      <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+      <link type="text/css" rel="stylesheet" href="css/main.css"/>
+      <!--Import jQuery before materialize.js-->      
+      <script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+      <script type="text/javascript" src="js/materialize.min.js"></script>
+      <script type="text/javascript" src="js/main.js"></script>
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+    <body>
+       <div class="row">
+        <div class="col s12">
+          <div class="hodeScroll">
+          <ul class="tabs">
+            <li class="tab"><a href="#cadastrarPaciente">Cadastrar Paciente</a></li>
+            <li class="tab"><a href="#cadastrarClinica">Cadastrar Clínica</a></li>
+            <li class="tab"><a href="#cadastrarPlano">Cadastrar Plano de Saúde</a></li>
+            <li class="tab"><a href="#cadastrarPlanoAceito">Cadastrar Plano Aceito</a></li>
+            <li class="tab"><a href="#cadastrarNutricionista">Cadastrar Nutricionista</a></li>
+            <li class="tab"><a href="#">Cadastrar Consulta</a></li>
+            <li class="tab"><a href="#">Cadastrar Dieta</a></li>
+            <li class="tab"><a href="#">Cadastrar Receita</a></li>
+            <li class="tab"><a href="#">Cadastrar Recomendações</a></li>
+            <li class="tab"><a href="#">Cadastrar Produtos</a></li>
+            <li class="tab"><a href="#">Cadastrar Fornecedor</a></li>
+            <li class="tab"><a href="#">Cadastrar Fornecimento</a></li>
+          </ul>
+        </div>
+      </div>
+      <div id="cadastrarPaciente">
+        <form class="col s12 telaCadastro">
+          <div class="row">
+            <div class="input-field col s12 m6 l6">
+              <input placeholder="Nome" id = "nomePaciente" type="text">
+              <label for = "nomePaciente">Nome</label>
+            </div>
+            <div class="input-field col s12 m6 l6">
+              <input placeholder="CPF" id = "cpfPaciente" type="text">
+              <label for = "cpfPaciente">CPF</label>
+            </div>
+           <div class="input-field col s12 m8 l8">
+              <input placeholder="Endereço" id = "enderecoPaciente" type="text">
+              <label for = "enderecoPaciente">Endereço</label>
+          </div>
+          <div class="input-field col s6 m4 l4">
+              <input placeholder="Data Nascimento" id = "nascimentoPaciente" type="text" class="datepicker">
+              <label for = "nascimentoPaciente">Data de Nascimento</label>
+          </div>
+           <div class="input-field col s6 m6 l6">
+              <input placeholder="Plano de Saúde" id = "planoPaciente" type="text">
+              <label for = "planoPaciente">Plano de Saúde</label>
+          </div>
+           <div class="input-field col s12 m6 l6">
+              <input placeholder="Telefone" id = "telefonePaciente" type="text">
+              <label for = "telefonePaciente">Telefone</label>
+          </div>
+        </div>          
+      </form>
+    </div>
+    <div id="cadastrarClinica">
+      <form class="col s12 telaCadastro">
+          <div class="row">
+            <div class="input-field col s12 m6 l6">
+              <input placeholder="Nome" id = "nomeClinica" type="text">
+              <label for = "nomeClinica">Nome</label>
+            </div>
+            <div class="input-field col s12 m6 l6">
+              <input placeholder="Endereço" id = "enderecoClinica" type="text">
+              <label for = "enderecoClinica">Endereço</label>
+          </div>
+        </div>          
+      </form>
+    </div>
+    <div id="cadastrarPlano">
+      <form class="col s12 telaCadastro">
+          <div class="row">
+            <div class="input-field col s12 m6 l6">
+              <input placeholder="Nome" id = "nomePlano" type="text">
+              <label for = "nomePlano">Nome</label>
+            </div>
+            <div class="input-field col s12 m6 l6">
+              <input placeholder="Desconto" id = "descontoPlano" type="text">
+              <label for = "descontoPlano">Desconto</label>
+          </div>
+        </div>          
+      </form>
+    </div>
+    <div id="cadastrarPlanoAceito">
+      <form class="col s12 telaCadastro">
+          <div class="row">
+            <div class="input-field col s12 m6 l6">
+              <input placeholder="Nome do Plano" id = "nomePlanoAceito" type="text">
+              <label for = "nomePlanoAcieto">Nome do Plano</label>
+            </div>
+            <div class="input-field col s12 m6 l6">
+              <input placeholder="Nome da Clínica" id = "nomeClinicaAceita" type="text">
+              <label for = "nomeClinicaAceita">Nome da Clínica</label>
+          </div>
+        </div>          
+      </form>
+    </div>
+    <div id="cadastrarNutricionista">
+      <form class="col s12 telaCadastro">
+          <div class="row">
+            <div class="input-field col s12 m12 l12">
+              <input placeholder="Nome" id = "nomeNutricionista" type="text">
+              <label for = "nomeNutricionista">Nome</label>
+            </div>
+            <div class="input-field col s12 m6 l6">
+              <input placeholder="CPF" id = "cpfNutricionista" type="text">
+              <label for = "cpfNutricionista">CPF</label>
+          </div>
+          <div class="input-field col s12 m6 l6">
+            <input placeholder="Especialização" id = "especializacaoNutricionista" type="text">
+              <label for = "especializacaoNutricionista">Especialização</label>
+          </div>
+        </div>          
+      </form>
+    </div>
+    </div>
+    </body>
+  </html>

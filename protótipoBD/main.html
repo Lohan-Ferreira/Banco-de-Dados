@@ -23,13 +23,13 @@
             <li class="tab"><a href="#cadastrarPlano">Cadastrar Plano de Saúde</a></li>
             <li class="tab"><a href="#cadastrarPlanoAceito">Cadastrar Plano Aceito</a></li>
             <li class="tab"><a href="#cadastrarNutricionista">Cadastrar Nutricionista</a></li>
-            <li class="tab"><a href="#">Cadastrar Consulta</a></li>
-            <li class="tab"><a href="#">Cadastrar Dieta</a></li>
-            <li class="tab"><a href="#">Cadastrar Receita</a></li>
-            <li class="tab"><a href="#">Cadastrar Recomendações</a></li>
-            <li class="tab"><a href="#">Cadastrar Produtos</a></li>
-            <li class="tab"><a href="#">Cadastrar Fornecedor</a></li>
-            <li class="tab"><a href="#">Cadastrar Fornecimento</a></li>
+            <li class="tab"><a href="#cadastrarConsulta">Cadastrar Consulta</a></li>
+            <li class="tab"><a href="#cadastrarDieta">Cadastrar Dieta</a></li>
+            <li class="tab"><a href="#cadastrarReceita">Cadastrar Receita</a></li>
+            <li class="tab"><a href="#cadastrarRecomendacoes">Cadastrar Recomendações</a></li>
+            <li class="tab"><a href="#cadastrarProduto">Cadastrar Produtos</a></li>
+            <li class="tab"><a href="#cadastrarFornecedor">Cadastrar Fornecedor</a></li>
+            <li class="tab"><a href="#cadastrarFornecimento">Cadastrar Fornecimento</a></li>
           </ul>
         </div>
       </div>
@@ -120,6 +120,120 @@
             <input placeholder="Especialização" id = "especializacaoNutricionista" type="text">
               <label for = "especializacaoNutricionista">Especialização</label>
           </div>
+        </div>          
+      </form>
+    </div>
+     <div id="cadastrarConsulta">
+        <form class="col s12 telaCadastro">
+          <div class="row">
+            <div class="input-field col s12 m6 l6">
+              <input placeholder="Nome do Paciente" id = "nomePacienteConsulta" type="text">
+              <label for = "nomePacienteConsulta">Nome do Paciente</label>
+            </div>
+            <div class="input-field col s12 m6 l6">
+              <input placeholder="Nome do Nutricionista" id = "nomeNutricionistaConsulta" type="text">
+              <label for = "nomeNutricionistaConsulta">Nome do Nutricionista</label>
+            </div>
+          <div class="input-field col s6 m4 l4">
+              <input placeholder="Data da Consulta" id = "dataConsulta" type="text" class="datepicker">
+              <label for = "dataConsulta">Data da Consulta</label>
+          </div>
+        </div>          
+      </form>
+    </div>
+     <div id="cadastrarDieta">
+        <form class="col s12 telaCadastro">
+          <div class="row">
+            <div class="input-field col s12 m12 l12">
+              <textarea placeholder="Instruções" id = "instrucoesDieta" class="materialize-textarea"></textarea>
+              <label for = "instrucoesDieta">Instruções</label>
+            </div>
+        </div>          
+      </form>
+    </div>
+    <div id="cadastrarReceita">
+        <form class="col s12 telaCadastro">
+          <div class="row">
+            <div class="input-field col s12 m6 l6">
+              <input placeholder="Nome do Nutricionista" id = "nomeNutricionistaReceita" type="text">
+              <label for = "nomeNutricionistaReceita">Nome do Nutricionista</label>
+            </div>
+            <div class="input-field col s12 m12 l12">
+              <textarea placeholder="Preparo" id = "preparoReceita" class="materialize-textarea"></textarea>
+              <label for = "preparoReceita">Preparo</label>
+            </div>
+        </div>          
+      </form>
+    </div>
+    <div id="cadastrarRecomendacoes">
+        <form class="col s12 telaCadastro">
+          <div class="row">
+            <div class="input-field col s12 m6 l6">
+              <input placeholder="Nome do Paciente" id = "nomePacienteRecomendacao" type="text">
+              <label for = "nomePacienteRecomendacao">Nome do Paciente</label>
+            </div>
+            <div class="input-field col s12 m6 l6">
+              <input placeholder="Nome do Nutricionista" id = "nomeNutricionistaRecomendacao" type="text">
+              <label for = "nomeNutricionistaRecomendacao">Nome do Nutricionista</label>
+            </div>
+          <div class="input-field col s6 m4 l4">
+              <input placeholder="Código da Dieta" id = "codigoDietaRecomendacao" type="text" class="datepicker">
+              <label for = "codigoDietaRecomendacao">Código da Dieta</label>
+          </div>
+        </div>          
+      </form>
+    </div>
+     <div id="cadastrarProduto">
+        <form class="col s12 telaCadastro">
+          <div class="row">
+            <div class="input-field col s12 m6 l6">
+              <input placeholder="Nome" id = "nomeProduto" type="text">
+              <label for = "nomeProduto">Nome</label>
+            </div>
+            <div class="input-field col s12 m12 l12">
+              <textarea placeholder="Descrição" id = "descricaoProduto" class="materialize-textarea"></textarea>
+              <label for = "descricaoProduto">Descrição</label>
+            </div>
+            <div class="input-field col s12 m6 l6">
+              <input placeholder="Faixa de Preço" id = "faixadeprecoProduto" type="text">
+              <label for = "faixadeprecoProduto">Faixa de Preço</label>
+            </div>
+            <div class="input-field col s12 m6 l6">
+              <select id="tipoProduto">
+                <option value = "" disabled selected>Escolha o Tipo do Produto</option>
+                <option value="Natural">Natural</option>
+                <option value="Industrial">Industrial</option>
+                <label for = "tipoProduto">Tipo Produto</label>
+              </select>
+            </div>
+            <div class="input-field col s6 m4 l4">
+              <input placeholder="Prazo de Validade" id = "validadeProduto" type="text" class="datepicker" disabled>
+              <label for = "validadeProduto">Prazo de Validade</label>
+          </div>            
+        </div>          
+      </form>
+    </div>
+     <div id="cadastrarFornecedor">
+      <form class="col s12 telaCadastro">
+          <div class="row">
+            <div class="input-field col s12 m12 l12">
+              <input placeholder="Nome" id = "nomeFornecedor" type="text">
+              <label for = "nomeFornecedor">Nome</label>
+            </div>
+        </div>          
+      </form>
+    </div>
+    <div id="cadastrarFornecimento">
+        <form class="col s12 telaCadastro">
+          <div class="row">
+            <div class="input-field col s12 m6 l6">
+              <input placeholder="Nome do Produto" id = "nomeProdutoFornecimento" type="text">
+              <label for = "nomeProdutoFronecimento">Nome do Produto</label>
+            </div>
+            <div class="input-field col s12 m6 l6">
+              <input placeholder="Nome do Fornecedor" id = "nomeFornecedorFornecimento" type="text">
+              <label for = "nomeFornecedorFornecimento">Nome do Fornecedor</label>
+            </div>
         </div>          
       </form>
     </div>

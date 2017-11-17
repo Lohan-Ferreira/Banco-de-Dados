@@ -47,6 +47,34 @@ COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 SET search_path = "Nutri", pg_catalog;
 
 --
+-- Name: descontar(); Type: FUNCTION; Schema: Nutri; Owner: postgres
+--
+
+CREATE FUNCTION descontar() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+declare desconto integer;
+declare plano integer;
+declare validade date;
+Begin
+      select p.cod_plan,p.datavalidade into plano,validade
+      from  paciente p
+      where new.cpfp = p.cpf;
+      if(plano != NULL and validade > NOW()) then
+        select plan.desconto into desconto
+        from plano_saude plan 
+        where plan.cod =  plano;
+        new.preco = new.preco *(desconto/100);
+      end if;
+      return new;
+ 
+END;
+$$;
+
+
+ALTER FUNCTION "Nutri".descontar() OWNER TO postgres;
+
+--
 -- Name: insert(); Type: FUNCTION; Schema: Nutri; Owner: postgres
 --
 
@@ -66,7 +94,7 @@ ALTER FUNCTION "Nutri".insert() OWNER TO postgres;
 CREATE FUNCTION no_insert() RETURNS trigger
     LANGUAGE plpgsql
     AS $$Begin
-       RAISE NOTICE 'Valores invalidos foram inseridos!';
+       RAISE EXCEPTION 'Valores invalidos foram inseridos!';
        return null;
 end;$$;
 
@@ -80,7 +108,11 @@ ALTER FUNCTION "Nutri".no_insert() OWNER TO postgres;
 CREATE FUNCTION verif_date() RETURNS trigger
     LANGUAGE plpgsql
     AS $$BEGIN
-       if ( new.data_inicio > ((select data from consulta c where c.id = new.id) +7))then return null;
+       if ( new.data_inicio > ((select data from consulta c where c.id = new.id) +7))then 
+       RAISE EXCEPTION 'Data Invalida!'
+       USING HINT = 'O tratamento só pode ser iniciado no prazo de 7 dias após a consulta!';
+  
+       return null;
        end if;
        return new;
 
@@ -91,13 +123,37 @@ $$;
 ALTER FUNCTION "Nutri".verif_date() OWNER TO postgres;
 
 --
+-- Name: verif_desconto(); Type: FUNCTION; Schema: Nutri; Owner: postgres
+--
+
+CREATE FUNCTION verif_desconto() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+Begin
+      if (new.desconto > 50) then
+      raise exception 'Desconto invalido!'
+      using hint = 'Descontos aceitos são de no máximo 50%!';
+      return null;
+      end if;
+      return new;
+END;
+$$;
+
+
+ALTER FUNCTION "Nutri".verif_desconto() OWNER TO postgres;
+
+--
 -- Name: verif_peso(); Type: FUNCTION; Schema: Nutri; Owner: postgres
 --
 
 CREATE FUNCTION verif_peso() RETURNS trigger
     LANGUAGE plpgsql
     AS $$Begin
-       if (new.peso_objetivo > new.peso_inicio) then return null ; end if;
+       if (new.peso_objetivo > new.peso_inicio) then
+               RAISE EXCEPTION 'Peso objetivo invalido.'
+               USING HINT = 'O peso objetivo deve ser menor que o inicial.';
+               return null ; 
+       end if;
        return new;
 end;$$;
 
@@ -301,7 +357,7 @@ ALTER TABLE prod_natural OWNER TO postgres;
 
 CREATE TABLE produto (
     cod bigint NOT NULL,
-    descricao character varying(100) NOT NULL,
+    descricao character varying(200) NOT NULL,
     "faixa_preço" character varying(50) NOT NULL,
     nome character varying(30) NOT NULL
 );
@@ -316,7 +372,7 @@ ALTER TABLE produto OWNER TO postgres;
 CREATE TABLE receita (
     cod integer NOT NULL,
     cpfn bigint NOT NULL,
-    preparo character varying(200),
+    preparo character varying(300),
     nome character varying(30)
 );
 
@@ -370,7 +426,8 @@ CREATE TABLE tratamento (
     cpfn bigint NOT NULL,
     id integer NOT NULL,
     data_inicio date NOT NULL,
-    instrucoes character varying(300)
+    instrucoes character varying(300),
+    preco real NOT NULL
 );
 
 
@@ -456,7 +513,7 @@ INSERT INTO ed_alimentar VALUES (95726404943, 26407639286, 7, 'Vitamina B12,C,D'
 --
 
 INSERT INTO emagrecimento VALUES (57003539180, 45853145443, 2, 120, 90);
-INSERT INTO emagrecimento VALUES (84065496850, 45853145443, 78, 150, 100);
+INSERT INTO emagrecimento VALUES (84065496850, 45853145443, 78, 150, 110);
 
 
 --
@@ -533,9 +590,8 @@ INSERT INTO plano_saude VALUES (2, 'PlanoB', 15);
 INSERT INTO plano_saude VALUES (3, 'PlanoC', 20);
 INSERT INTO plano_saude VALUES (4, 'PlanoD', 23);
 INSERT INTO plano_saude VALUES (5, 'PlanoE', 27);
-INSERT INTO plano_saude VALUES (6, 'PlanoF', 32);
 INSERT INTO plano_saude VALUES (7, 'PlanoG', 43);
-INSERT INTO plano_saude VALUES (8, 'PlanoH', 67);
+INSERT INTO plano_saude VALUES (6, 'PlanoF', 34);
 
 
 --
@@ -658,13 +714,14 @@ INSERT INTO telefone VALUES (67029386446, 47581436);
 -- Data for Name: tratamento; Type: TABLE DATA; Schema: Nutri; Owner: postgres
 --
 
-INSERT INTO tratamento VALUES (NULL, 40424332855, 46854340391, 3, '2016-03-30', 'algumas instruçoes');
-INSERT INTO tratamento VALUES (5, 99778398530, 29112712456, 8, '2016-07-20', NULL);
-INSERT INTO tratamento VALUES (10, 57003539180, 45853145443, 2, '2017-01-15', NULL);
-INSERT INTO tratamento VALUES (9, 95726404943, 26407639286, 7, '2015-03-20', 'Seguir a dieta corretamento e fazer os seguintes exercicios ~');
-INSERT INTO tratamento VALUES (NULL, 13062640650, 35250308247, 6, '2015-11-30', NULL);
-INSERT INTO tratamento VALUES (12, 13072640651, 42279095602, 1, '1995-12-11', '');
-INSERT INTO tratamento VALUES (3, 84065496850, 45853145443, 78, '2015-12-01', 'Instrucoes');
+INSERT INTO tratamento VALUES (NULL, 40424332855, 46854340391, 3, '2016-03-30', 'algumas instruçoes', 50);
+INSERT INTO tratamento VALUES (9, 95726404943, 26407639286, 7, '2015-03-20', 'Seguir a dieta corretamento e fazer os seguintes exercicios ~', 78.3000031);
+INSERT INTO tratamento VALUES (NULL, 13062640650, 35250308247, 6, '2015-11-30', NULL, 30.5);
+INSERT INTO tratamento VALUES (12, 13072640651, 42279095602, 1, '1995-12-11', '', 103);
+INSERT INTO tratamento VALUES (3, 84065496850, 45853145443, 78, '2015-12-01', 'Instrucoes', 99.9000015);
+INSERT INTO tratamento VALUES (10, 57003539180, 45853145443, 2, '2017-01-15', NULL, 130);
+INSERT INTO tratamento VALUES (5, 99778398530, 29112712456, 8, '2016-07-20', NULL, 41);
+INSERT INTO tratamento VALUES (NULL, 67029386446, 45380537574, 56, '2017-10-17', NULL, 100);
 
 
 --
@@ -884,6 +941,13 @@ CREATE TRIGGER alem_consulta BEFORE INSERT OR UPDATE ON tratamento FOR EACH ROW 
 
 
 --
+-- Name: tratamento calc_desconto; Type: TRIGGER; Schema: Nutri; Owner: postgres
+--
+
+CREATE TRIGGER calc_desconto BEFORE INSERT OR UPDATE ON tratamento FOR EACH ROW EXECUTE PROCEDURE descontar();
+
+
+--
 -- Name: paciente cpf_invalid1; Type: TRIGGER; Schema: Nutri; Owner: postgres
 --
 
@@ -895,6 +959,13 @@ CREATE TRIGGER cpf_invalid1 BEFORE INSERT OR UPDATE ON paciente FOR EACH ROW WHE
 --
 
 CREATE TRIGGER cpf_invalid2 BEFORE INSERT OR UPDATE ON nutricionista FOR EACH ROW WHEN (((new.cpf < '10000000000'::bigint) OR (new.cpf > '99999999999'::bigint))) EXECUTE PROCEDURE no_insert();
+
+
+--
+-- Name: plano_saude desconto_invalid; Type: TRIGGER; Schema: Nutri; Owner: postgres
+--
+
+CREATE TRIGGER desconto_invalid BEFORE INSERT OR UPDATE ON plano_saude FOR EACH ROW EXECUTE PROCEDURE verif_desconto();
 
 
 --

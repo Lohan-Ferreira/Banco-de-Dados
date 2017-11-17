@@ -1,0 +1,1 @@
+O dumping de uma tabela complexa e um nome de esquema não é suportado no Windows.

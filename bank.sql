@@ -160,6 +160,48 @@ end;$$;
 
 ALTER FUNCTION "Nutri".verif_peso() OWNER TO postgres;
 
+--
+-- Name: verif_safra(); Type: FUNCTION; Schema: Nutri; Owner: postgres
+--
+
+CREATE FUNCTION verif_safra() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+ if ( new.safra < ( NOW() - interval '360 days' ))then 
+       RAISE EXCEPTION 'Safra Invalida!'
+       USING HINT = 'Produtos aceitos devem possuir safra de no máximo 1 ano anterior ao cadastro!';
+  
+       return null;
+       end if;
+       return new;
+END;
+$$;
+
+
+ALTER FUNCTION "Nutri".verif_safra() OWNER TO postgres;
+
+--
+-- Name: verif_vencimento(); Type: FUNCTION; Schema: Nutri; Owner: postgres
+--
+
+CREATE FUNCTION verif_vencimento() RETURNS trigger
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+ if ( new.validade < ( NOW() + '30 days' ))then 
+       RAISE EXCEPTION 'Data Invalida!'
+       USING HINT = 'O prazo de vencimento do produto deve ser de no minimo 1 mes após cadastro!';
+  
+       return null;
+       end if;
+       return new;
+END;
+$$;
+
+
+ALTER FUNCTION "Nutri".verif_vencimento() OWNER TO postgres;
+
 SET default_tablespace = '';
 
 SET default_with_oids = false;
@@ -279,8 +321,7 @@ ALTER TABLE musculacao OWNER TO postgres;
 CREATE TABLE nutricionista (
     cpf bigint NOT NULL,
     cod integer NOT NULL,
-    nome character varying(30),
-    especializacao character varying(20)
+    nome character varying(30)
 );
 
 
@@ -544,21 +585,21 @@ INSERT INTO musculacao VALUES (40424332855, 46854340391, 3, 'Lista de exercicios
 -- Data for Name: nutricionista; Type: TABLE DATA; Schema: Nutri; Owner: postgres
 --
 
-INSERT INTO nutricionista VALUES (45853145443, 7, 'Vania', 'Emagrecimento');
-INSERT INTO nutricionista VALUES (42279095602, 1, 'Clarice', 'Emagrecimento');
-INSERT INTO nutricionista VALUES (10445663612, 5, 'Gustavo', 'Emagrecimento');
-INSERT INTO nutricionista VALUES (35250308247, 7, 'Yago', 'Emagrecimento');
-INSERT INTO nutricionista VALUES (82609205883, 6, 'Junior Flavio', 'Emagrecimento');
-INSERT INTO nutricionista VALUES (34595951297, 1, 'Manelita', 'Emagrecimento');
-INSERT INTO nutricionista VALUES (46854340391, 4, 'Lara Croft', 'Musculação');
-INSERT INTO nutricionista VALUES (65519865238, 2, 'Eugenia', 'Musculação');
-INSERT INTO nutricionista VALUES (61234746407, 5, 'Rodrigo Luis', 'Musculação');
-INSERT INTO nutricionista VALUES (90467826797, 2, 'Lucas Ribeiro', 'Musculação');
-INSERT INTO nutricionista VALUES (24727030610, 4, 'Paulo Pato', 'Musculação');
-INSERT INTO nutricionista VALUES (45380537574, 2, 'Tania', 'Educação Alimentar');
-INSERT INTO nutricionista VALUES (42692571365, 1, 'Varginha', 'Educação Alimentar');
-INSERT INTO nutricionista VALUES (26407639286, 7, 'Fabio', 'Educação Alimentar');
-INSERT INTO nutricionista VALUES (29112712456, 3, 'Otavio', 'Educação Alimentar');
+INSERT INTO nutricionista VALUES (45853145443, 7, 'Vania');
+INSERT INTO nutricionista VALUES (42279095602, 1, 'Clarice');
+INSERT INTO nutricionista VALUES (10445663612, 5, 'Gustavo');
+INSERT INTO nutricionista VALUES (35250308247, 7, 'Yago');
+INSERT INTO nutricionista VALUES (82609205883, 6, 'Junior Flavio');
+INSERT INTO nutricionista VALUES (34595951297, 1, 'Manelita');
+INSERT INTO nutricionista VALUES (46854340391, 4, 'Lara Croft');
+INSERT INTO nutricionista VALUES (65519865238, 2, 'Eugenia');
+INSERT INTO nutricionista VALUES (61234746407, 5, 'Rodrigo Luis');
+INSERT INTO nutricionista VALUES (90467826797, 2, 'Lucas Ribeiro');
+INSERT INTO nutricionista VALUES (24727030610, 4, 'Paulo Pato');
+INSERT INTO nutricionista VALUES (45380537574, 2, 'Tania');
+INSERT INTO nutricionista VALUES (42692571365, 1, 'Varginha');
+INSERT INTO nutricionista VALUES (26407639286, 7, 'Fabio');
+INSERT INTO nutricionista VALUES (29112712456, 3, 'Otavio');
 
 
 --
@@ -622,7 +663,7 @@ INSERT INTO planos_aceitos VALUES (1, 8);
 --
 
 INSERT INTO prod_industrial VALUES (715, '2019-05-13');
-INSERT INTO prod_industrial VALUES (448, '2018-01-01');
+INSERT INTO prod_industrial VALUES (448, '2019-01-01');
 
 
 --
@@ -980,6 +1021,20 @@ CREATE TRIGGER peso_invalido BEFORE INSERT OR UPDATE ON emagrecimento FOR EACH R
 --
 
 CREATE TRIGGER senha_invalida BEFORE INSERT OR UPDATE ON conta FOR EACH ROW WHEN (((new.senha < 100000) OR (new.senha > 999999999))) EXECUTE PROCEDURE no_insert();
+
+
+--
+-- Name: prod_natural v_safra; Type: TRIGGER; Schema: Nutri; Owner: postgres
+--
+
+CREATE TRIGGER v_safra BEFORE INSERT OR UPDATE ON prod_natural FOR EACH ROW EXECUTE PROCEDURE verif_safra();
+
+
+--
+-- Name: prod_industrial vencimento; Type: TRIGGER; Schema: Nutri; Owner: postgres
+--
+
+CREATE TRIGGER vencimento BEFORE INSERT OR UPDATE ON prod_industrial FOR EACH ROW EXECUTE PROCEDURE verif_vencimento();
 
 
 --
